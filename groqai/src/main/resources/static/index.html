@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Groq AI API Integration</title>
+</head>
+<body>
+<h1>Ask a Question</h1>
+<form id="questionForm">
+    <label for="question">Question:</label><br>
+    <input type="text" id="question" name="question" required><br>
+    <label for="model">Model:</label><br>
+    <input type="text" id="model" name="model" value="llama3-8b-8192" required><br><br>
+    <input type="submit" value="Submit">
+</form>
+<h2>Response:</h2>
+<pre id="response"></pre>
+
+<script>
+    document.getElementById('questionForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const question = document.getElementById('question').value;
+        const model = document.getElementById('model').value;
+
+        fetch('http://localhost:8080/get-completion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: question, model: model })
+        })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('response').textContent = data;
+        })
+        .catch(error => {
+            document.getElementById('response').textContent = 'Error: ' + error;
+        });
+    });
+</script>
+</body>
+</html>
